@@ -265,7 +265,49 @@ header h1 {
   position: relative;
 }
 
+.ad-card {
+  border: 2px dashed #0077b5;
+  background-color: #f9f9ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.ad-card h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.ad-card-image-wrapper {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ad-card img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+.card .company {
+  font-weight: 500;
+  color: #444;
+  margin: -0.5rem 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+h2 {
+  margin-bottom: 0;
+}
 
   </style>
 </head>
@@ -309,9 +351,10 @@ header h1 {
   </footer>
 
   <script>
-    const jobs = [
+  const jobs = [
   {
     title: "Neural Interface Specialist",
+    company: "Cognix Labs",
     compatibility: "98%",
     about: "Bridge human cognition with AI using brain-computer interfaces (BCIs).",
     responsibilities: [
@@ -327,6 +370,7 @@ header h1 {
   },
   {
     title: "Digital Kinship Coordinator",
+    company: "Liminal Connect",
     compatibility: "92%",
     about: "Foster deep, meaningful relationships in hyperconnected virtual communities.",
     responsibilities: [
@@ -342,6 +386,7 @@ header h1 {
   },
   {
     title: "AI-Enhanced Conflict Mediator",
+    company: "ResolveAI",
     compatibility: "95%",
     about: "Resolve high-stakes interpersonal or global conflicts using AI-powered tools.",
     responsibilities: [
@@ -357,6 +402,7 @@ header h1 {
   },
   {
     title: "Curator of Lost Professions",
+    company: "Zeitgeist Museum",
     compatibility: "90%",
     about: "Lead the Museum of Lost Professions, an interactive exploration of obsolete jobs and the emergence of meaning-driven roles.",
     responsibilities: [
@@ -373,6 +419,7 @@ header h1 {
   },
   {
     title: "Human Experience Architect",
+    company: "Eunoia Systems",
     compatibility: "95%",
     about: "Design new models of community that blend digital and physical spaces, fostering collective well-being, creativity, and kinship.",
     responsibilities: [
@@ -389,6 +436,7 @@ header h1 {
   },
   {
     title: "Intergenerational Bridgebuilder",
+    company: "Common Thread",
     compatibility: "90%",
     about: "Facilitate connections across generations, fostering emotional resilience and wisdom-sharing.",
     responsibilities: [
@@ -402,90 +450,134 @@ header h1 {
       "Ability to engage across generational divides.",
       "Passion for reshaping cultural perceptions of caregiving and emotional labor."
     ]
-  }
+  },
 ];
 
-    const jobBoard = document.getElementById("job-board");
-    const searchInput = document.getElementById("search-input");
-    const modal = document.getElementById("modal");
-    const closeBtn = document.getElementById("close-btn");
-    const modalTitle = document.getElementById("modal-title");
-    const modalAbout = document.getElementById("modal-about");
-    const modalResp = document.getElementById("modal-resp");
-    const modalQual = document.getElementById("modal-qual");
-    const applyBtn = document.getElementById("apply-btn");
-    const agentMsg = document.getElementById("agent-message");
 
-    function renderJobs(filteredJobs = jobs) {
-      jobBoard.innerHTML = "";
-      filteredJobs.forEach((job) => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <h2>${job.title}</h2>
-          <p><strong>Compatibility:</strong> ${job.compatibility}</p>
-          <p>${job.about}</p>
-        `;
-        card.addEventListener("click", () => openModal(job));
-        jobBoard.appendChild(card);
-      });
-    }
+  const jobBoard = document.getElementById("job-board");
+  const searchInput = document.getElementById("search-input");
+  const modal = document.getElementById("modal");
+  const closeBtn = document.getElementById("close-btn");
+  const modalTitle = document.getElementById("modal-title");
+  const modalAbout = document.getElementById("modal-about");
+  const modalResp = document.getElementById("modal-resp");
+  const modalQual = document.getElementById("modal-qual");
+  const applyBtn = document.getElementById("apply-btn");
+  const agentMsg = document.getElementById("agent-message");
 
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase();
-      const filtered = jobs.filter(job =>
-        job.title.toLowerCase().includes(query) ||
-        job.about.toLowerCase().includes(query)
-      );
-      renderJobs(filtered);
-    });
+  function renderJobs(filteredJobs = jobs) {
+    jobBoard.innerHTML = "";
 
-    function openModal(job) {
-      modalTitle.textContent = job.title;
-      modalAbout.textContent = job.about;
-      modalResp.innerHTML = "";
-      modalQual.innerHTML = "";
-      agentMsg.style.display = "none";
-      agentMsg.textContent = "";
-      job.responsibilities.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        modalResp.appendChild(li);
-      });
-      job.qualifications.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        modalQual.appendChild(li);
-      });
-      modal.classList.add("show");
-      modal.classList.remove("hidden");
-    }
+    filteredJobs.forEach((job, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+  <h2>${job.title}</h2>
+  <p class="company">${job.company}</p>
+  <p>${job.about}</p>
+  <p><strong>Compatibility:</strong> ${job.compatibility}</p>
+`;
 
-    applyBtn.addEventListener("click", () => {
-      agentMsg.style.display = "block";
-      agentMsg.textContent = "Sending...";
-      setTimeout(() => {
-        agentMsg.textContent = "✅ Interview initiated between agents.";
-      }, 1500);
-    });
+      card.addEventListener("click", () => openModal(job));
+      jobBoard.appendChild(card);
 
-    closeBtn.addEventListener("click", () => {
-      modal.classList.remove("show");
-      modal.classList.add("hidden");
-    });
-
-    window.addEventListener("click", e => {
-      if (e.target.id === "modal") {
-        modal.classList.remove("show");
-        modal.classList.add("hidden");
+      if (index === 2) {
+        renderAdCard(); // AI Sanctuary ad
+      }
+      if (index === 4) {
+        renderPickleballAdCard(); // Pickleball ad
       }
     });
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
+  function renderAdCard() {
+    const adCard = document.createElement("div");
+    adCard.className = "card ad-card";
+    adCard.innerHTML = `
+      <h2>Visit New AI Sanctuary Near You!</h2>
+      <div class="ad-card-image-wrapper">
+        <img src="ad.png" alt="Ad thumbnail">
+      </div>
+      <button onclick="window.open('https://link-to-video.com', '_blank')" class="apply-btn" style="margin-top: 15px;">
+        Watch Now
+      </button>
+    `;
+    jobBoard.appendChild(adCard);
+  }
+
+  function renderPickleballAdCard() {
+    const pickleAd = document.createElement("div");
+    pickleAd.className = "card ad-card";
+    pickleAd.innerHTML = `
+      <h2>Watch the National Pickleball Finals!</h2>
+      <div class="ad-card-image-wrapper">
+        <img src="pickle.jpg" alt="Pickleball Match Thumbnail">
+      </div>
+      <button onclick="window.open('https://tickets-to-pickleball.com', '_blank')" class="apply-btn" style="margin-top: 15px;">
+        Get Tickets
+      </button>
+    `;
+    jobBoard.appendChild(pickleAd);
+  }
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered = jobs.filter(job =>
+      job.title.toLowerCase().includes(query) ||
+      job.about.toLowerCase().includes(query)
+    );
+    renderJobs(filtered); // re-renders all cards and ads
+  });
+
+  function openModal(job) {
+    modalTitle.textContent = job.title;
+    modalAbout.textContent = job.about;
+    modalResp.innerHTML = "";
+    modalQual.innerHTML = "";
+    agentMsg.style.display = "none";
+    agentMsg.textContent = "";
+    job.responsibilities.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      modalResp.appendChild(li);
+    });
+    job.qualifications.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      modalQual.appendChild(li);
+    });
+    modal.classList.add("show");
+    modal.classList.remove("hidden");
+  }
+
+  applyBtn.addEventListener("click", () => {
+    agentMsg.style.display = "block";
+    agentMsg.textContent = "Sending...";
+    setTimeout(() => {
+      agentMsg.textContent = "✅ Interview initiated between agents.";
+    }, 1500);
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.classList.remove("show");
+    modal.classList.add("hidden");
+  });
+
+  window.addEventListener("click", e => {
+    if (e.target.id === "modal") {
       modal.classList.remove("show");
       modal.classList.add("hidden");
-      renderJobs();
-    });
-  </script>
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    modal.classList.remove("show");
+    modal.classList.add("hidden");
+    renderJobs(); // loads jobs + ads on initial load
+  });
+</script>
+
+
+
 </body>
 </html>
