@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OptIn: Future Jobs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: #f4f6f8;
+      color: #1d1d1f;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    header h1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    header {
+      text-align: center;
+      background: linear-gradient(90deg, #e0e0e0, #ffffff);
+      color: #0077b5;
+      /* padding: 2rem; */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    #search-container {
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #search-input {
+      width: 50%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  flex-grow: 1;
+  align-items: start; /* <- This is the key */
+}
+
+
+    .card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: auto;
+  min-height: unset;
+  gap: 0.5rem;
+}
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      color: #0077b5;
+      margin-top: 0;
+    }
+
+    #modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    #modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border: 1px solid #0077b5;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 90%;
+      color: #1d1d1f;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    #close-btn {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #0077b5;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    .apply-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #0077b5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .apply-btn:hover {
+      background-color: #005f91;
+    }
+
+    #agent-message {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #e6f7ff;
+      border: 1px solid #b3e0ff;
+      color: #0077b5;
+      border-radius: 8px;
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #f0f0f0;
+      color: #666;
+      font-size: 0.85rem;
+      border-top: 1px solid #ddd;
+    }
+
+
+
+
+
+
+
+    .card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  flex-grow: 1;
+  align-items: stretch;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #e0e0e0, #ffffff);
+  color: #0077b5;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+header h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.6rem;
+  color: #0077b5;
+  cursor: pointer;
+}
+
+#search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+}
+
+#search-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: 'Orbitron', sans-serif;
+  position: relative;
+}
+
+#filter-icon {
+  font-size: 1.2rem;
+  color: #0077b5;
+  cursor: pointer;
+  margin-left: -2.6rem;
+  margin-right: 0.5rem;
+  background: white;
+  padding: 0.4rem;
+  border-radius: 6px;
+  z-index: 1;
+  position: relative;
+}
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+  </style>
+</head>
+<body>
+    <header>
+        <h1>
+          <img src="logo.png" alt="OptIn Logo" class="logo"> Human Careers
+        </h1>
+        <div class="header-icons">
+          <i class="fas fa-bell" title="Notifications"></i>
+          <i class="fas fa-user-circle" title="Profile"></i>
+        </div>
+      </header>
+      
+      <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search jobs...">
+        <i class="fas fa-filter" id="filter-icon" title="Filter Jobs"></i>
+      </div>
+      
+
+  <main id="job-board">
+    <!-- Job cards injected here -->
+  </main>
+
+  <div id="modal" class="hidden">
+    <div class="modal-content" id="modal-box">
+      <span id="close-btn">&times;</span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-about"></p>
+      <h3>Responsibilities</h3>
+      <ul id="modal-resp"></ul>
+      <h3>Qualifications</h3>
+      <ul id="modal-qual"></ul>
+      <button class="apply-btn" id="apply-btn">Send My AI Agent</button>
+      <div id="agent-message">Initiating interview between agents...</div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2075 OptIn Futures. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const jobs = [
+  {
+    title: "Neural Interface Specialist",
+    compatibility: "98%",
+    about: "Bridge human cognition with AI using brain-computer interfaces (BCIs).",
+    responsibilities: [
+      "Develop intuitive neural interfaces.",
+      "Collaborate with neuroscientists on cognitive UX.",
+      "Refine brain-to-AI communication flows."
+    ],
+    qualifications: [
+      "Degree in neuroscience or HCI.",
+      "Experience with neural signal processing.",
+      "Familiarity with BCI hardware."
+    ]
+  },
+  {
+    title: "Digital Kinship Coordinator",
+    compatibility: "92%",
+    about: "Foster deep, meaningful relationships in hyperconnected virtual communities.",
+    responsibilities: [
+      "Design and facilitate digital tribes.",
+      "Run AI-powered bonding experiences.",
+      "Maintain online psychological safety."
+    ],
+    qualifications: [
+      "Background in anthropology or community management.",
+      "VR/social platform experience.",
+      "Empathy-driven leadership."
+    ]
+  },
+  {
+    title: "AI-Enhanced Conflict Mediator",
+    compatibility: "95%",
+    about: "Resolve high-stakes interpersonal or global conflicts using AI-powered tools.",
+    responsibilities: [
+      "Use AI to analyze emotional tone and predict outcomes.",
+      "Mediate digitally through virtual environments.",
+      "Develop de-escalation protocols with AI."
+    ],
+    qualifications: [
+      "Background in psychology or mediation.",
+      "Experience with AI sentiment tools.",
+      "Strong emotional intelligence."
+    ]
+  },
+  {
+    title: "Curator of Lost Professions",
+    compatibility: "90%",
+    about: "Lead the Museum of Lost Professions, an interactive exploration of obsolete jobs and the emergence of meaning-driven roles.",
+    responsibilities: [
+      "Curate and design the Museum of Lost Professions, both digitally and in print.",
+      "Research and document historical careers and their transformation into modern roles.",
+      "Facilitate interactive experiences where users can contribute personal stories and future visions.",
+      "Collaborate with historians, designers, and technologists to create immersive and meaningful experiences."
+    ],
+    qualifications: [
+      "Background in history, museum curation, or career development.",
+      "Strong storytelling and creative design skills.",
+      "Passion for exploring the evolution of work and its cultural impact."
+    ]
+  },
+  {
+    title: "Human Experience Architect",
+    compatibility: "95%",
+    about: "Design new models of community that blend digital and physical spaces, fostering collective well-being, creativity, and kinship.",
+    responsibilities: [
+      "Design purpose-driven communities that integrate digital and physical environments.",
+      "Reimagine economic systems to prioritize collective well-being and creativity.",
+      "Develop spaces where work fosters meaning and shared purpose.",
+      "Collaborate with urban designers, behavioral psychologists, and tech experts to create human-centered environments."
+    ],
+    qualifications: [
+      "Background in urban design, behavioral psychology, or emerging tech.",
+      "Passion for creating sustainable, purpose-driven communities.",
+      "Experience blending physical and digital spaces to enhance human connection."
+    ]
+  },
+  {
+    title: "Intergenerational Bridgebuilder",
+    compatibility: "90%",
+    about: "Facilitate connections across generations, fostering emotional resilience and wisdom-sharing.",
+    responsibilities: [
+      "Facilitate intergenerational dialogues and mentorship programs.",
+      "Advocate for emotional labor recognition and compensation.",
+      "Collaborate with AI developers to ensure human empathy is prioritized in tech.",
+      "Develop workshops to teach emotional intelligence and conflict resolution."
+    ],
+    qualifications: [
+      "Experience in emotional intelligence, conflict mediation, or mentorship.",
+      "Ability to engage across generational divides.",
+      "Passion for reshaping cultural perceptions of caregiving and emotional labor."
+    ]
+  }
+];
+
+    const jobBoard = document.getElementById("job-board");
+    const searchInput = document.getElementById("search-input");
+    const modal = document.getElementById("modal");
+    const closeBtn = document.getElementById("close-btn");
+    const modalTitle = document.getElementById("modal-title");
+    const modalAbout = document.getElementById("modal-about");
+    const modalResp = document.getElementById("modal-resp");
+    const modalQual = document.getElementById("modal-qual");
+    const applyBtn = document.getElementById("apply-btn");
+    const agentMsg = document.getElementById("agent-message");
+
+    function renderJobs(filteredJobs = jobs) {
+      jobBoard.innerHTML = "";
+      filteredJobs.forEach((job) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h2>${job.title}</h2>
+          <p><strong>Compatibility:</strong> ${job.compatibility}</p>
+          <p>${job.about}</p>
+        `;
+        card.addEventListener("click", () => openModal(job));
+        jobBoard.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      const filtered = jobs.filter(job =>
+        job.title.toLowerCase().includes(query) ||
+        job.about.toLowerCase().includes(query)
+      );
+      renderJobs(filtered);
+    });
+
+    function openModal(job) {
+      modalTitle.textContent = job.title;
+      modalAbout.textContent = job.about;
+      modalResp.innerHTML = "";
+      modalQual.innerHTML = "";
+      agentMsg.style.display = "none";
+      agentMsg.textContent = "";
+      job.responsibilities.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        modalResp.appendChild(li);
+      });
+      job.qualifications.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        modalQual.appendChild(li);
+      });
+      modal.classList.add("show");
+      modal.classList.remove("hidden");
+    }
+
+    applyBtn.addEventListener("click", () => {
+      agentMsg.style.display = "block";
+      agentMsg.textContent = "Sending...";
+      setTimeout(() => {
+        agentMsg.textContent = "✅ Interview initiated between agents.";
+      }, 1500);
+    });
+
+    closeBtn.addEventListener("click", () => {
+      modal.classList.remove("show");
+      modal.classList.add("hidden");
+    });
+
+    window.addEventListener("click", e => {
+      if (e.target.id === "modal") {
+        modal.classList.remove("show");
+        modal.classList.add("hidden");
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      modal.classList.remove("show");
+      modal.classList.add("hidden");
+      renderJobs();
+    });
+  </script>
+</body>
+</html>
